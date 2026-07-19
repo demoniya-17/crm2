@@ -1,15 +1,580 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VortxLab Creations</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  </head>
-  <body class="bg-black text-white antialiased">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Narainsons Finance CRM</title>
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+    :root{--sb:#120929;--sb2:#1c0f3f;--ac:#7c3aed;--ac2:#a855f7;--bg:#f6f4ff;--card:#fff;--bdr:#e0d4ff;--txt:#1e0a3c;--txt2:#6c3dd4;--txt3:#9b6ff5;--lav:#ede5ff}
+    body{background:var(--bg)}
+    .crm{display:flex;height:760px;background:#0e0620;border-radius:16px;overflow:hidden}
+    .sidebar{width:210px;background:var(--sb);flex-shrink:0;display:flex;flex-direction:column;border-right:0.5px solid rgba(124,58,237,0.2)}
+    .logo-area{padding:14px;border-bottom:0.5px solid rgba(124,58,237,0.15);display:flex;align-items:center;gap:9px}
+    .lb{width:34px;height:34px;background:#7c3aed;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#fff;flex-shrink:0}
+    .ln{font-size:12px;font-weight:500;color:#fff}
+    .ls{font-size:8.5px;color:rgba(196,168,252,0.45);letter-spacing:0.5px}
+    .nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{font-size:8.5px;color:rgba(196,168,252,0.3);padding:10px 13px 3px;letter-spacing:1px;text-transform:uppercase}
+    .ni{display:flex;align-items:center;gap:8px;padding:8px 13px;font-size:11.5px;color:rgba(196,168,252,0.5);cursor:pointer;border-left:2px solid transparent;transition:all 0.12s;user-select:none}
+    .ni:hover{color:rgba(196,168,252,0.85);background:rgba(124,58,237,0.08)}
+    .ni.active{color:#fff;background:rgba(124,58,237,0.22);border-left-color:#a855f7}
+    .ni i{font-size:14px;width:15px}
+    .sup-box{margin:10px;background:rgba(124,58,237,0.1);border:0.5px solid rgba(124,58,237,0.2);border-radius:9px;padding:9px 10px}
+    .sup-t{font-size:10.5px;font-weight:500;color:#c4a8fc;margin-bottom:2px}
+    .sup-d{font-size:9px;color:rgba(196,168,252,0.35);line-height:1.5}
+    .main{flex:1;display:flex;flex-direction:column;background:var(--bg);min-width:0}
+    .topbar{background:#fff;border-bottom:1px solid var(--bdr);padding:9px 16px;display:flex;align-items:center;gap:9px}
+    .sbox{flex:1;max-width:320px;display:flex;align-items:center;background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:0 10px;gap:6px}
+    .sbox input{border:none;background:transparent;outline:none;font-size:11.5px;color:var(--txt);padding:6px 0;width:100%}
+    .sbox i{color:var(--txt3);font-size:13px}
+    .tbr{display:flex;align-items:center;gap:7px;margin-left:auto}
+    .ib{width:31px;height:31px;border-radius:8px;border:1px solid var(--bdr);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;color:var(--ac)}
+    .bdg{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:#ef4444;border-radius:50%;font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:500;border:1.5px solid #fff}
+    .av{width:31px;height:31px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff}
+    .content{flex:1;padding:14px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+    .page{display:none;flex-direction:column;gap:12px}
+    .page.active{display:flex}
+    .ph{display:flex;justify-content:space-between;align-items:flex-start}
+    .ptitle{font-size:17px;font-weight:500;color:var(--txt)}
+    .psub{font-size:11px;color:var(--txt3);margin-top:2px}
+    .dchip{background:#fff;border:1px solid var(--bdr);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--txt2);display:flex;align-items:center;gap:5px}
+    .kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+    .kc{background:#fff;border:1px solid var(--bdr);border-radius:11px;padding:11px 12px}
+    .ktop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+    .klbl{font-size:9.5px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.4px}
+    .kico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .ki-pu{background:#ede5ff;color:#6c3dd4}
+    .ki-gr{background:#d1fae5;color:#065f46}
+    .ki-am{background:#fef3c7;color:#92400e}
+    .ki-re{background:#fee2e2;color:#991b1b}
+    .ki-cy{background:#dbeafe;color:#1e40af}
+    .kval{font-size:16px;font-weight:500;color:var(--txt);margin-bottom:2px}
+    .ktrend{font-size:9.5px;color:#16a34a;display:flex;align-items:center;gap:2px}
+    .vlink{font-size:10.5px;color:var(--ac);cursor:pointer;margin-top:5px}
+    .mgrid{display:grid;grid-template-columns:1fr 0.6fr 0.5fr;gap:10px}
+    .card{background:#fff;border:1px solid var(--bdr);border-radius:11px;padding:12px}
+    .ctitle{font-size:11.5px;font-weight:500;color:var(--txt);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+    .bgrid{display:grid;grid-template-columns:1fr 0.42fr;gap:10px}
+    .atbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+    .atbl th{text-align:left;color:var(--txt3);font-weight:400;font-size:9.5px;padding:0 5px 6px;border-bottom:1px solid #f0ebff;text-transform:uppercase;letter-spacing:0.4px}
+    .atbl td{padding:6px 5px;border-bottom:0.5px solid #f6f4ff;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .atbl tr:last-child td{border:none}
+    .tag{display:inline-block;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:500}
+    .tp{background:#d1fae5;color:#065f46}
+    .tc{background:#dbeafe;color:#1e40af}
+    .to{background:#fee2e2;color:#991b1b}
+    .rcol{display:flex;flex-direction:column;gap:10px}
+    .qarow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+    .qab{background:var(--lav);border:1px solid var(--bdr);border-radius:8px;padding:8px 5px;font-size:9.5px;color:var(--txt);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.15s}
+    .qab i{font-size:16px;color:var(--ac)}
+    .qab:hover{background:#ede5ff;border-color:#c4a8fc}
+    .lbar{height:7px;border-radius:20px;overflow:hidden;display:flex;margin:7px 0}
+    .lseg{height:100%}
+    .lleg{display:grid;grid-template-columns:1fr 1fr;gap:3px 5px}
+    .llr{display:flex;align-items:center;gap:4px;font-size:9.5px;color:var(--txt2)}
+    .lld{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+    .alist{display:flex;flex-direction:column;gap:5px}
+    .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:11.5px;cursor:pointer;border:none;font-weight:500;transition:all 0.15s}
+    .btn-primary{background:var(--ac);color:#fff}
+    .btn-primary:hover{background:#6d28d9}
+    .btn-secondary{background:var(--lav);color:var(--txt2);border:1px solid var(--bdr)}
+    .btn-secondary:hover{background:#e0d4ff}
+    .btn-danger{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+    .btn-sm{padding:4px 9px;font-size:10.5px}
+    .search-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+    .search-bar input{flex:1;background:#fff;border:1px solid var(--bdr);border-radius:8px;padding:7px 12px;font-size:11.5px;color:var(--txt);outline:none}
+    .search-bar input:focus{border-color:var(--ac)}
+    .tbl-wrap{background:#fff;border:1px solid var(--bdr);border-radius:11px;overflow:hidden}
+    .full-tbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+    .full-tbl th{background:var(--lav);color:var(--txt2);font-weight:500;font-size:10px;padding:9px 10px;text-align:left;border-bottom:1px solid var(--bdr);text-transform:uppercase;letter-spacing:0.4px}
+    .full-tbl td{padding:8px 10px;border-bottom:0.5px solid #f6f4ff;color:var(--txt);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .full-tbl tr:last-child td{border:none}
+    .full-tbl tr:hover td{background:#faf8ff}
+    .modal-bg{display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(30,10,60,0.45);z-index:100;align-items:center;justify-content:center;border-radius:16px}
+    .modal-bg.open{display:flex}
+    .modal{background:#fff;border-radius:14px;padding:20px;width:480px;max-width:95%;max-height:90%;overflow-y:auto;border:1px solid var(--bdr)}
+    .modal-title{font-size:15px;font-weight:500;color:var(--txt);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+    .modal-close{cursor:pointer;color:var(--txt3);font-size:18px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .form-group{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+    .form-group label{font-size:10.5px;color:var(--txt2);font-weight:500}
+    .form-group input,.form-group select{background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:7px 10px;font-size:11.5px;color:var(--txt);outline:none}
+    .form-group input:focus,.form-group select:focus{border-color:var(--ac)}
+    .upload-zone{border:2px dashed var(--bdr);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:var(--bg);transition:all 0.15s;margin-bottom:10px}
+    .upload-zone:hover{border-color:var(--ac);background:var(--lav)}
+    .upload-zone i{font-size:28px;color:var(--ac);display:block;margin-bottom:6px}
+    .upload-zone p{font-size:11.5px;color:var(--txt2)}
+    .upload-zone small{font-size:10px;color:var(--txt3)}
+    .page-header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}
+    .stat-card{background:#fff;border:1px solid var(--bdr);border-radius:10px;padding:11px 12px}
+    .stat-label{font-size:9.5px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+    .stat-val{font-size:17px;font-weight:500;color:var(--txt)}
+    .empty-state{text-align:center;padding:32px 20px;color:var(--txt3)}
+    .empty-state i{font-size:36px;color:var(--bdr);display:block;margin-bottom:8px}
+    .empty-state p{font-size:12px}
+    .empty-state small{font-size:10.5px;color:var(--txt3)}
+    .chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:500}
+    .chip-active{background:#d1fae5;color:#065f46}
+    .chip-closed{background:#f3f4f6;color:#374151}
+    .chip-overdue{background:#fee2e2;color:#991b1b}
+    .toast{position:absolute;bottom:16px;right:16px;background:#1e0a3c;color:#fff;padding:10px 16px;border-radius:9px;font-size:11.5px;z-index:200;display:none;align-items:center;gap:7px;border:1px solid rgba(124,58,237,0.4)}
+    .toast.show{display:flex}
+    .emi-plan-card{background:#fff;border:1px solid var(--bdr);border-radius:11px;padding:13px;margin-bottom:10px}
+    .emi-plan-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+    .emi-plan-title{font-size:12.5px;font-weight:500;color:var(--txt)}
+    .emi-plan-meta{font-size:10px;color:var(--txt3);margin-top:2px}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    .info-item{background:var(--bg);border-radius:8px;padding:9px 11px}
+    .info-key{font-size:9.5px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px}
+    .info-val{font-size:12px;font-weight:500;color:var(--txt)}
+    .pager{display:flex;align-items:center;gap:6px;margin-top:8px;justify-content:flex-end}
+    .pager button{background:#fff;border:1px solid var(--bdr);border-radius:6px;padding:4px 9px;font-size:10.5px;color:var(--txt2);cursor:pointer}
+    .pager button:hover{background:var(--lav)}
+    .pager span{font-size:10.5px;color:var(--txt3)}
+    .csel{font-size:10px;background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:3px 7px;color:var(--txt2);outline:none}
+  </style>
+</head>
+<body>
+
+<div class="crm" style="position:relative">
+  <div class="sidebar">
+    <div class="logo-area">
+      <div class="lb">NF</div>
+      <div><div class="ln">Narainsons</div><div class="ls">FINANCE & CONSULTANCY</div></div>
+    </div>
+    <nav class="nav">
+      <div class="ns">Main</div>
+      <div class="ni active" onclick="showPage('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+      <div class="ni" onclick="showPage('customers',this)"><i class="ti ti-users"></i>Customers</div>
+      <div class="ni" onclick="showPage('loans',this)"><i class="ti ti-credit-card"></i>Loans</div>
+      <div class="ni" onclick="showPage('collections',this)"><i class="ti ti-building-bank"></i>Collections</div>
+      <div class="ns">Finance</div>
+      <div class="ni" onclick="showPage('emi',this)"><i class="ti ti-calendar"></i>EMI Plans</div>
+      <div class="ni" onclick="showPage('topup',this)"><i class="ti ti-trending-up"></i>Top-up</div>
+      <div class="ni" onclick="showPage('moratorium',this)"><i class="ti ti-pause"></i>Moratorium</div>
+      <div class="ni" onclick="showPage('payments',this)"><i class="ti ti-receipt"></i>Payments</div>
+    </nav>
+    <div class="sup-box">
+      <div class="sup-t"><i class="ti ti-headset"></i>Support Team</div>
+      <div class="sup-d">9211220702 / 03 / 04<br>collection.cashtm@gmail.com</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="sbox"><i class="ti ti-search"></i><input type="text" id="global-search" placeholder="Search customers, loans…" oninput="globalSearch(this.value)"></div>
+      <div class="tbr">
+        <div class="ib"><i class="ti ti-bell"></i><span class="bdg" id="notif-count">0</span></div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="av">AD</div>
+          <div><div style="font-size:11.5px;font-weight:500;color:#1e0a3c">Admin</div><div style="font-size:9.5px;color:#9b6ff5">Super Admin</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- DASHBOARD PAGE -->
+      <div class="page active" id="page-dashboard">
+        <div class="ph">
+          <div><div class="ptitle">Dashboard</div><div class="psub">Welcome back, Admin</div></div>
+          <div class="dchip"><i class="ti ti-calendar"></i><span id="today-date"></span></div>
+        </div>
+        <div class="kgrid">
+          <div class="kc"><div class="ktop"><span class="klbl">Total Customers</span><div class="kico ki-pu"><i class="ti ti-users"></i></div></div><div class="kval" id="kpi-cust">0</div><div class="ktrend"><span id="kpi-cust-sub">Upload CSV to load</span></div></div>
+          <div class="kc"><div class="ktop"><span class="klbl">Active Loans</span><div class="kico ki-gr"><i class="ti ti-credit-card"></i></div></div><div class="kval" id="kpi-active">0</div><div class="ktrend" id="kpi-active-sub">—</div></div>
+          <div class="kc"><div class="ktop"><span class="klbl">Total Outstanding</span><div class="kico ki-am"><i class="ti ti-currency-rupee"></i></div></div><div class="kval" id="kpi-outstanding">₹0</div><div class="ktrend">Total disbursed</div></div>
+          <div class="kc"><div class="ktop"><span class="klbl">Overdue Amount</span><div class="kico ki-re"><i class="ti ti-alert-circle"></i></div></div><div class="kval" id="kpi-overdue">₹0</div><div class="ktrend" id="kpi-overdue-trend">—</div></div>
+          <div class="kc"><div class="ktop"><span class="klbl">EMI Due Today</span><div class="kico ki-cy"><i class="ti ti-clock"></i></div></div><div class="kval" id="kpi-emi">0</div><div class="vlink" onclick="showPage('emi',null)">View Details →</div></div>
+        </div>
+        
+        <div class="mgrid">
+          <div class="card">
+            <div class="ctitle">Collection Summary</div>
+            <svg viewBox="0 0 300 115" width="100%" style="overflow:visible">
+              <polygon points="22,82 65,70 108,95 151,62 194,67 237,64 280,20 280,108 22,108" fill="#ede5ff" opacity="0.5"/>
+              <polyline points="22,82 65,70 108,95 151,62 194,67 237,64 280,20" fill="none" stroke="#7c3aed" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="card">
+            <div class="ctitle">Outstanding by Bucket</div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <svg viewBox="0 0 110 110" width="70" height="70"><circle cx="55" cy="55" r="38" fill="none" stroke="#7c3aed" stroke-width="16"/><text x="55" y="58" text-anchor="middle" font-size="8" id="donut-val">₹0</text></svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ctitle">Top Agents</div>
+            <div class="alist" id="top-agents"></div>
+          </div>
+        </div>
+
+        <div class="bgrid">
+          <div class="card">
+            <div class="ctitle">Recent Activities</div>
+            <table class="atbl">
+              <thead><tr><th>Type</th><th>Customer</th><th>Details</th><th>Amount</th><th>Status</th></tr></thead>
+              <tbody id="recent-tbody"></tbody>
+            </table>
+          </div>
+          <div class="rcol">
+            <div class="card">
+              <div class="ctitle">Quick Actions</div>
+              <div class="qarow">
+                <div class="qab" onclick="openModal('modal-add-customer')"><i class="ti ti-user-plus"></i><span>Customer</span></div>
+                <div class="qab" onclick="openModal('modal-add-loan')"><i class="ti ti-credit-card"></i><span>Loan</span></div>
+                <div class="qab" onclick="openModal('modal-record-payment')"><i class="ti ti-currency-rupee"></i><span>Payment</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS PAGE -->
+      <div class="page" id="page-customers">
+        <div class="page-header-row">
+          <div class="ptitle">Customers</div>
+          <div style="display:flex;gap:7px">
+            <button class="btn btn-secondary btn-sm" onclick="openModal('modal-upload-csv')">Upload CSV</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-customer')">Add Customer</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="full-tbl">
+            <thead><tr><th>Name</th><th>PAN</th><th>Phone</th><th>Acc No</th><th>Disbursed</th><th>Overdue</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="cust-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- LOANS PAGE -->
+      <div class="page" id="page-loans">
+        <div class="page-header-row"><div class="ptitle">Loans</div></div>
+        <div class="tbl-wrap">
+          <table class="full-tbl">
+            <thead><tr><th>Customer</th><th>Account No.</th><th>Disbursed Amt</th><th>Overdue Amt</th><th>Status</th></tr></thead>
+            <tbody id="loan-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- COLLECTIONS PAGE -->
+      <div class="page" id="page-collections">
+        <div class="page-header-row"><div class="ptitle">Collections Overview</div></div>
+        <div class="tbl-wrap">
+          <table class="full-tbl">
+            <thead><tr><th>Customer</th><th>Phone</th><th>Account No.</th><th>Overdue Amt</th><th>Status</th></tr></thead>
+            <tbody id="coll-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EMI PLANS PAGE -->
+      <div class="page" id="page-emi">
+        <div class="page-header-row">
+          <div class="ptitle">EMI Plans</div>
+          <button class="btn btn-secondary btn-sm" onclick="openModal('modal-upload-emi')">Upload EMI CSV</button>
+        </div>
+        <div id="emi-plans-list"></div>
+      </div>
+
+      <!-- TOP-UP PAGE -->
+      <div class="page" id="page-topup">
+        <div class="page-header-row">
+          <div class="ptitle">Top-up Loans</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-create-topup')">Add Top-up</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="full-tbl">
+            <thead><tr><th>Account No</th><th>Top-up Amt</th><th>Start Date</th><th>End Date</th><th>Monthly EMI</th><th>Status</th></tr></thead>
+            <tbody id="topup-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MORATORIUM PAGE -->
+      <div class="page" id="page-moratorium">
+        <div class="page-header-row">
+          <div class="ptitle">Moratorium Records</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-create-mora')">Apply Pause</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="full-tbl">
+            <thead><tr><th>Account No</th><th>Start</th><th>End</th><th>Interest</th><th>New End Date</th><th>Status</th></tr></thead>
+            <tbody id="mora-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PAYMENTS PAGE -->
+      <div class="page" id="page-payments">
+        <div class="page-header-row"><div class="ptitle">Payments Registry</div></div>
+        <div class="tbl-wrap">
+          <table class="full-tbl">
+            <thead><tr><th>Customer</th><th>Acc No</th><th>Amount</th><th>Date</th><th>Type</th></tr></thead>
+            <tbody id="pay-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-upload-csv">
+  <div class="modal">
+    <div class="modal-title">Upload Customer CSV <span class="modal-close" onclick="closeModal('modal-upload-csv')">×</span></div>
+    <input type="file" accept=".csv" onchange="handleCustomerCSV(this)">
+    <div id="csv-preview"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-upload-emi">
+  <div class="modal">
+    <div class="modal-title">Upload EMI CSV <span class="modal-close" onclick="closeModal('modal-upload-emi')">×</span></div>
+    <input type="file" accept=".csv" onchange="handleEmiCSV(this)">
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-add-customer">
+  <div class="modal">
+    <div class="modal-title">New Customer <span class="modal-close" onclick="closeModal('modal-add-customer')">×</span></div>
+    <div class="form-group"><label>Name</label><input type="text" id="nc-name"></div>
+    <div class="form-group"><label>PAN</label><input type="text" id="nc-pan"></div>
+    <div class="form-group"><label>Phone</label><input type="text" id="nc-phone"></div>
+    <div class="form-group"><label>Account No</label><input type="text" id="nc-acc"></div>
+    <div class="form-group"><label>Disbursed Amt</label><input type="number" id="nc-amt"></div>
+    <button class="btn btn-primary" onclick="addCustomer()">Save</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-create-topup">
+  <div class="modal">
+    <div class="modal-title">Create Top-up Loan <span class="modal-close" onclick="closeModal('modal-create-topup')">×</span></div>
+    <div class="form-group"><label>Account No.</label><input type="text" id="ct-acc"></div>
+    <div class="form-group"><label>Top-up Amount (₹)</label><input type="number" id="ct-amt"></div>
+    <div class="form-group"><label>Start Date</label><input type="date" id="ct-start"></div>
+    <div class="form-group"><label>End Date</label><input type="date" id="ct-end"></div>
+    <div class="form-group"><label>Monthly EMI (₹)</label><input type="number" id="ct-emi"></div>
+    <button class="btn btn-primary" onclick="createTopup()">Submit Top-up</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-create-mora">
+  <div class="modal">
+    <div class="modal-title">Apply Moratorium Plan <span class="modal-close" onclick="closeModal('modal-create-mora')">×</span></div>
+    <div class="form-group"><label>Account No.</label><input type="text" id="cm-acc"></div>
+    <div class="form-group"><label>Moratorium Start</label><input type="date" id="cm-start"></div>
+    <div class="form-group"><label>Moratorium End</label><input type="date" id="cm-end"></div>
+    <div class="form-group"><label>Interest Accrual</label><select id="cm-interest"><option value="no">No</option><option value="yes">Yes</option></select></div>
+    <div class="form-group"><label>New EMI End Date</label><input type="date" id="cm-new-end"></div>
+    <button class="btn btn-primary" onclick="createMora()">Apply Pause</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+let customers=[],emiPlans=[],topups=[],moratoria=[],payments=[];
+
+window.onload = function() {
+  document.getElementById('today-date').innerText = new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+  document.getElementById('top-agents').innerHTML = '<div style="padding:4px; font-size:11px; color:var(--txt2)">1. Collection Desk Admin</div>';
+  updateAllData();
+};
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+
+function showPage(name,navEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg)pg.classList.add('active');
+  if(navEl)navEl.classList.add('active');
+}
+
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  const headers=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/\s+/g,'_'));
+  return lines.slice(1).filter(l=>l.trim()).map(line=>{
+    const vals=line.split(',').map(v=>v.trim());
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=vals[i]||'');
+    return obj;
+  });
+}
+
+function handleCustomerCSV(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=parseCSV(e.target.result);
+      customers=data.map(r=>({
+        name:r.name||'',
+        pan_card:r.pan_card||'',
+        phone_no:r.phone_no||'',
+        acc_no:r.acc_no||'',
+        disbursed_date:r.disbursed_date||'',
+        disbursed_amt:parseFloat(r.disbursed_amt||0),
+        overdue:parseFloat(r.overdue||0),
+        status:(r.status||'active').toLowerCase()
+      })).filter(r=>r.name);
+      closeModal('modal-upload-csv');
+      updateAllData();
+      showToast(`${customers.length} Customers loaded!`);
+    }catch(err){showToast('Error loading file');}
+  };
+  reader.readAsText(file);
+}
+
+function handleEmiCSV(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=parseCSV(e.target.result);
+      emiPlans=data.map(r=>({
+        name:r.name||'',
+        acc_no:r.acc_no||'',
+        emi_start_date:r.emi_start_date||'',
+        emi_end_date:r.emi_end_date||'',
+        total_emi:parseInt(r.total_emi||0),
+        total_paid_emi:parseInt(r.total_paid_emi||0),
+        total_amt:parseFloat(r.total_amt||0),
+        amt_left:parseFloat(r.amt_left||0)
+      })).filter(r=>r.acc_no);
+      closeModal('modal-upload-emi');
+      updateAllData();
+      showToast(`${emiPlans.length} EMI plans parsed!`);
+    }catch(err){showToast('Error parsing file');}
+  };
+  reader.readAsText(file);
+}
+
+function fmtAmt(v){
+  return '₹'+Math.round(v).toLocaleString('en-IN');
+}
+
+function updateAllData(){
+  document.getElementById('kpi-cust').textContent=customers.length;
+  document.getElementById('kpi-active').textContent=customers.filter(c=>c.status==='active').length;
+  document.getElementById('kpi-outstanding').textContent=fmtAmt(customers.reduce((s,c)=>s+c.disbursed_amt,0));
+  document.getElementById('kpi-overdue').textContent=fmtAmt(customers.reduce((s,c)=>s+c.overdue,0));
+  
+  renderCustomers();
+  renderLoans();
+  renderCollections();
+  renderRecent();
+  renderEmiPlans();
+  renderTopups();
+  renderMoratoria();
+}
+
+function renderCustomers(){
+  const tbody=document.getElementById('cust-tbody');
+  if(!customers.length){tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:12px">No records found.</td></tr>`;return;}
+  tbody.innerHTML=customers.map(c=>`<tr>
+    <td><b>${c.name}</b></td><td>${c.pan_card}</td><td>${c.phone_no}</td><td>${c.acc_no}</td>
+    <td>${fmtAmt(c.disbursed_amt)}</td><td>${fmtAmt(c.overdue)}</td><td><span class="chip chip-active">${c.status}</span></td>
+    <td><button class="btn btn-secondary btn-sm" onclick="showToast('Loading metadata…')">Edit</button></td>
+  </tr>`).join('');
+}
+
+function renderLoans(){
+  const tbody=document.getElementById('loan-tbody');
+  if(!customers.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:12px">Clear</td></tr>`;return;}
+  tbody.innerHTML=customers.map(c=>`<tr><td>${c.name}</td><td>${c.acc_no}</td><td>${fmtAmt(c.disbursed_amt)}</td><td>${fmtAmt(c.overdue)}</td><td>${c.status}</td></tr>`).join('');
+}
+
+function renderCollections(){
+  const tbody=document.getElementById('coll-tbody');
+  const over=customers.filter(c=>c.overdue>0);
+  if(!over.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:12px">All accounts normal.</td></tr>`;return;}
+  tbody.innerHTML=over.map(c=>`<tr><td>${c.name}</td><td>${c.phone_no}</td><td>${c.acc_no}</td><td style="color:red">${fmtAmt(c.overdue)}</td><td>${c.status}</td></tr>`).join('');
+}
+
+function renderRecent(){
+  document.getElementById('recent-tbody').innerHTML = customers.slice(0,5).map(c=>`<tr><td><span class="tag tp">Disbursed</span></td><td>${c.name}</td><td>Account Created</td><td>${fmtAmt(c.disbursed_amt)}</td><td>Success</td></tr>`).join('');
+}
+
+function renderEmiPlans(){
+  const container=document.getElementById('emi-plans-list');
+  if(!emiPlans.length){container.innerHTML=`<div class="empty-state">No manual EMI profiles loaded.</div>`;return;}
+  container.innerHTML=emiPlans.map(e=>`
+    <div class="emi-plan-card">
+      <div class="emi-plan-header"><div class="emi-plan-title">${e.name} (${e.acc_no})</div></div>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-key">Total Book</div><div class="info-val">${fmtAmt(e.total_amt)}</div></div>
+        <div class="info-item"><div class="info-key">Principal Remaining</div><div class="info-val">${fmtAmt(e.amt_left)}</div></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function createTopup(){
+  const acc=document.getElementById('ct-acc').value.trim();
+  const amt=parseFloat(document.getElementById('ct-amt').value)||0;
+  const start=document.getElementById('ct-start').value;
+  const end=document.getElementById('ct-end').value;
+  const emi=parseFloat(document.getElementById('ct-emi').value)||0;
+
+  if(!acc||!amt){showToast('Please specify valid Account and Amount.');return;}
+  topups.push({ acc_no:acc, topup_amount:amt, emi_start_date:start, emi_end_date:end, monthly_emi:emi, status:'Active' });
+  closeModal('modal-create-topup');
+  renderTopups();
+  showToast('Top-up Loan mapped successfully!');
+}
+
+function renderTopups(){
+  const tbody=document.getElementById('topup-tbody');
+  if(!topups.length){tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:12px">No Top-ups allocated.</td></tr>`;return;}
+  tbody.innerHTML=topups.map(t=>`<tr><td>${t.acc_no}</td><td>${fmtAmt(t.topup_amount)}</td><td>${t.emi_start_date}</td><td>${t.emi_end_date}</td><td>${fmtAmt(t.monthly_emi)}</td><td><span class="chip chip-active">${t.status}</span></td></tr>`).join('');
+}
+
+function createMora(){
+  const acc=document.getElementById('cm-acc').value.trim();
+  const start=document.getElementById('cm-start').value;
+  const end=document.getElementById('cm-end').value;
+  const check=document.getElementById('cm-interest').value;
+  const newEnd=document.getElementById('cm-new-end').value;
+
+  if(!acc||!start){showToast('Account No. and dates required!');return;}
+  moratoria.push({ acc_no:acc, moratorium_start:start, moratorium_end:end, interest_accrual:check, new_emi_end_date:newEnd, status:'Active' });
+  closeModal('modal-create-mora');
+  renderMoratoria();
+  showToast('Moratorium hold pushed successfully!');
+}
+
+function renderMoratoria(){
+  const tbody=document.getElementById('mora-tbody');
+  if(!moratoria.length){tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:12px">No active holds found.</td></tr>`;return;}
+  tbody.innerHTML=moratoria.map(m=>`<tr><td>${m.acc_no}</td><td>${m.moratorium_start}</td><td>${m.moratorium_end}</td><td>${m.interest_accrual.toUpperCase()}</td><td>${m.new_emi_end_date}</td><td><span class="chip">${m.status}</span></td></tr>`).join('');
+}
+
+function addCustomer(){
+  const name=document.getElementById('nc-name').value.trim();
+  const acc=document.getElementById('nc-acc').value.trim();
+  const amt=parseFloat(document.getElementById('nc-amt').value)||0;
+  if(!name||!acc){showToast('Missing fields');return;}
+  customers.push({name, pan_card:document.getElementById('nc-pan').value, phone_no:document.getElementById('nc-phone').value, acc_no:acc, disbursed_date:'', disbursed_amt:amt, overdue:0, status:'active'});
+  closeModal('modal-add-customer');
+  updateAllData();
+  showToast('Customer Profile Saved.');
+}
+</script>
+</body>
 </html>
